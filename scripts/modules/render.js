@@ -1,6 +1,6 @@
 import { getCurrentDateTime } from "./utilis.js";
 
-export const renderWidgetToday = (widget) => {
+export const renderWidgetToday = (widget, dataWeather) => {
   const {dayOfMonth, month, year, hours, minutes, dayOfWeek} = getCurrentDateTime()
 
   widget.insertAdjacentHTML(
@@ -89,3 +89,8 @@ export const renderWidgetForecast = (widget) => {
     `
     )
 };
+
+export const showError = (widget, error) => {
+  widget.textContent = error.toString();
+  widget.classList.add('widget_error');
+}
