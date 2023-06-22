@@ -1,9 +1,11 @@
+import { handlerController } from './handlerController.js';
 import {startWidget} from './modules/widgetService.js';
 
 const init = async (app) => {
-  const widget = await startWidget();
-
+  const {widget, form, btnEdit} = await startWidget();
+ 
   app.append(widget);
+  handlerController(widget, form, btnEdit, app);
 };
 /*
 const init = (app) => {
