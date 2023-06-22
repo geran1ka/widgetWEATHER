@@ -3,8 +3,7 @@ const API_KEY = '473296fefddfa590470d9e7668822b54';
 
 export const fetchWeather = async (city) => {
   try {
-    const response = await fetch(`${API_URL}weather?q=${city}&appid=${API_KEY}&lang=ru`);
-    console.log('response: ', response);
+    const response = await fetch(`${API_URL}weather?units=metric&q=${city}&appid=${API_KEY}&lang=ru`);
 
     if (!response.ok) {
       throw new Error('Ошибка запроса');
@@ -25,9 +24,7 @@ export const fetchWeather = async (city) => {
 
 export const fetchForecast = async (city) => {
   try {
-    const response = await fetch(`${API_URL}forecast?q=${city}&appid=${API_KEY}&lang=ru`);
-    console.log('response: ', response);
-
+    const response = await fetch(`${API_URL}forecast?units=metric&q=${city}&appid=${API_KEY}&lang=ru`);
     if (!response.ok) {
       throw new Error('Ошибка запроса');
     }

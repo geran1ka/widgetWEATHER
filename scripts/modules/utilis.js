@@ -88,9 +88,8 @@ export const getWindDirection = (deg) => {
 
 export const gerWeatherForecasrData = (data) => {
   const forecast = data.list.filter(
-      (item) =>
-        new Date(item.dt_txt).getHours() === 12 &&
-        new Date(item.dt_txt).getDate() > new Date().getDate(),
+      (item) => new Date(item.dt_txt).getHours() === 9 &&
+      new Date(item.dt_txt).getDate() > new Date().getDate(),
   );
 
   const forecastData = forecast.map((item) => {
@@ -105,7 +104,7 @@ export const gerWeatherForecasrData = (data) => {
       'сб',
     ];
 
-    const dayOfWeek = weekdaysShort[date.getDate()];
+    const dayOfWeek = weekdaysShort[date.getDay()];
     const weatherIcon = item.weather[0].icon;
 
     let minTemp = Infinity;
@@ -118,11 +117,13 @@ export const gerWeatherForecasrData = (data) => {
       if (tempDate.getDate() === date.getDate()) {
         if (temp < minTemp) {
           minTemp = temp;
-        } else {
+        }
+        if (temp > maxTemp) {
           maxTemp = temp;
         }
       }
     }
+
     return {
       dayOfWeek,
       weatherIcon,

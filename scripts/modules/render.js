@@ -1,4 +1,10 @@
-import {calculateDewPoint, convertPressure, gerWeatherForecasrData, getCurrentDateTime, getDewPointTemperature, getDirectionWind, getWindDirection} from './utilis.js';
+import {
+  calculateDewPoint,
+  convertPressure,
+  gerWeatherForecasrData,
+  getCurrentDateTime,
+  getWindDirection,
+} from './utilis.js';
 
 export const renderWidgetToday = (widget, data) => {
   const {dayOfMonth, month, year, hours, minutes, dayOfWeek} = getCurrentDateTime();
@@ -20,9 +26,9 @@ export const renderWidgetToday = (widget, data) => {
             <p>${data.name}</p>
             <button class="widget__change-city" aria-label="Изменить город"></button>
           </div>
-          <p class="widget__temp-big">${(data.main.temp - 273.15).toFixed(1)}°C</p>
+          <p class="widget__temp-big">${(data.main.temp).toFixed(1)}°C</p>
           <p class="widget__felt">ощущается</p>
-          <p class="widget__temp-small">${(data.main.feels_like - 273.15).toFixed(1)} °C</p>
+          <p class="widget__temp-small">${(data.main.feels_like).toFixed(1)} °C</p>
         </div>
       </div>
     `,
@@ -30,7 +36,6 @@ export const renderWidgetToday = (widget, data) => {
 };
 
 export const renderWidgetOther = (widget, data) => {
-  console.log('data: ', data);
   widget.insertAdjacentHTML(
       'beforeEnd',
       `
@@ -45,7 +50,7 @@ export const renderWidgetOther = (widget, data) => {
           <p class="widget__humidity-title">Влажность</p>
           <p class="widget__humidity-value">${data.main.humidity}%</p>
           <p class="widget__humidity-text">Т.Р: 
-            ${calculateDewPoint((data.main.feels_like - 273.15), data.main.humidity)} 
+            ${calculateDewPoint((data.main.feels_like), data.main.humidity)} 
             °C</p>
         </div>
         <div class="widget__pressure">
@@ -64,15 +69,16 @@ export const renderWidgetForecast = (widget, data) => {
   widget.append(widgetForecast);
 
   const forecastData = gerWeatherForecasrData(data);
+  console.log('forecastData: ', forecastData);
 
   const items = forecastData.map((item) => {
     const widgetDateItem = document.createElement('li');
     widgetDateItem.className = 'widget__day-item';
 
-    widgetDateItem.insertAdjacentElement('beforebegin', `
+    widgetDateItem.insertAdjacentHTML('beforeend', `
       <p class="widget__day-text">${item.dayOfWeek}</p>
       <img class="widget__day-img" src="./icon/${item.weatherIcon}.svg" alt="Погода">
-      <p class="widget__day-temp">${(item.minTemp - 273.15).toFixed(1)}°/${(item.maxTemp - 273.15).toFixed(1)}°</p>
+      <p class="widget__day-temp">${(item.minTemp).toFixed(1)}°/${(item.maxTemp).toFixed(1)}°</p>
     `);
     return widgetDateItem;
   });
@@ -84,17 +90,18 @@ export const showError = (widget, error) => {
   widget.textContent = error.toString();
   widget.classList.add('widget_error');
 };
-/*
-{
 
-  const nord = 0; &#8593;
-  const nordEast = 45; &#8599;
-  const east = 90; &#8594;
-  const southEast = 135; &#8600;
-  const south = 180; &#8595;
-  const southWest = 225; &#8601;
-  const west = 270; &#8592;
-  const nordWest = 315; &#8598;
+export const renderForm = (widget) => {
+  const form = document.createElement('form');
+  form.classList.add('widget__form');
 
-}*/
+  const input = document.createElement('input');
+  input.classList.add('widget__input');
+  input.name = 'city';
+
+  form.append(input);
+
+  return form;
+};
+
 
