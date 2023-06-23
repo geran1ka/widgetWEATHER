@@ -41,3 +41,20 @@ export const fetchForecast = async (city) => {
     };
   }
 };
+
+export const getCity = async () => {
+  const url = 'https://ipapi.co/city';
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Ошибка получения города');
+    }
+    const city = await response.text();
+
+    return {success: true, city};
+  } catch (error) {
+    console.error(error);
+    return {success: false, error};
+  }
+};

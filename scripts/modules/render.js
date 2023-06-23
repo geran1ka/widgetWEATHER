@@ -3,7 +3,6 @@ import {
   convertPressure,
   gerWeatherForecasrData,
   getCurrentDateTime,
-  getWindDirection,
 } from './utilis.js';
 
 export const renderWidgetToday = (widget, data) => {
@@ -35,27 +34,27 @@ export const renderWidgetToday = (widget, data) => {
   );
 };
 
-export const renderWidgetOther = (widget, data) => {
+export const renderWidgetOther = (widget, {wind: {speed, deg}, main: {temp, humidity, pressure}}) => {
   widget.insertAdjacentHTML(
       'beforeEnd',
       `
       <div class="widget__other">
         <div class="widget__wind">
           <p class="widget__wind-title">Ветер</p>
-          <p class="widget__wind-speed">${data.wind.speed} м/с</p>
-          <p class="widget__wind-text">${getWindDirection(data.wind.deg)}</p>
+          <p class="widget__wind-speed">${speed} м/с</p>
+          <p class="widget__wind-text" style="transform: rotate(${deg}deg)">&#8595;</p>
 
         </div>
         <div class="widget__humidity">
           <p class="widget__humidity-title">Влажность</p>
-          <p class="widget__humidity-value">${data.main.humidity}%</p>
+          <p class="widget__humidity-value">${humidity}%</p>
           <p class="widget__humidity-text">Т.Р: 
-            ${calculateDewPoint((data.main.feels_like), data.main.humidity)} 
+            ${calculateDewPoint(temp, humidity)} 
             °C</p>
         </div>
         <div class="widget__pressure">
           <p class="widget__pressure-title">Давление</p>
-          <p class="widget__pressure-value">${convertPressure(data.main.pressure)}</p>
+          <p class="widget__pressure-value">${convertPressure(pressure)}</p>
           <p class="widget__pressure-text">мм рт.ст.</p>
         </div>
       </div>
@@ -69,7 +68,6 @@ export const renderWidgetForecast = (widget, data) => {
   widget.append(widgetForecast);
 
   const forecastData = gerWeatherForecasrData(data);
-  console.log('forecastData: ', forecastData);
 
   const items = forecastData.map((item) => {
     const widgetDateItem = document.createElement('li');
@@ -89,19 +87,8 @@ export const renderWidgetForecast = (widget, data) => {
 export const showError = (widget, error) => {
   widget.textContent = error.toString();
   widget.classList.add('widget_error');
+  setTimeout(() => {
+    location.reload();
+  }, 2000);
 };
-
-export const renderForm = (widget) => {
-  const form = document.createElement('form');
-  form.classList.add('widget__form');
-
-  const input = document.createElement('input');
-  input.classList.add('widget__input');
-  input.name = 'city';
-
-  form.append(input);
-
-  return form;
-};
-
 

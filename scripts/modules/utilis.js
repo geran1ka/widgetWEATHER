@@ -57,39 +57,11 @@ export const convertPressure = (pressure) => {
   return mmHg.toFixed(2);
 };
 
-export const getDirectionWind = (deg) => {
-  switch (true) {
-    case 0:
-      return '&#8593;';
-    case (deg > 0 && deg < 90):
-      return '&#8599;';
-    case 90:
-      return '&#8594;';
-    case deg > 90 && deg < 180:
-      return '&#8600;';
-    case 180:
-      return '&#8595;';
-    case deg > 180 && deg < 270:
-      return '&#8601;';
-    case 270:
-      return '&#8592;';
-    case deg > 270 && deg < 360:
-      return '&#8598;';
-  }
-};
-
-export const getWindDirection = (deg) => {
-  const directions = ['&#8593;', '&#8598;', '&#8592;', '&#8601;', '&#8595;', '&#8600;', '&#8594;', '&#8594;'];
-
-  const i = Math.round(deg / 45) % 8;
-
-  return directions[i];
-};
-
 export const gerWeatherForecasrData = (data) => {
   const forecast = data.list.filter(
       (item) => new Date(item.dt_txt).getHours() === 9 &&
-      new Date(item.dt_txt).getDate() > new Date().getDate(),
+      new Date(item.dt_txt).getDate() > new Date().getDate() &&
+      new Date(item.dt_txt).getDate() < new Date().getDate() + 5,
   );
 
   const forecastData = forecast.map((item) => {
